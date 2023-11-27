@@ -1,3 +1,9 @@
+/*
+Audiobadge
+
+by Paulus
+License: GNU GPL v3
+*/
 
 #include "FS.h"
 #include "SD.h"
