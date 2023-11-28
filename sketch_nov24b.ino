@@ -13,6 +13,8 @@ License: GNU GPL v3
 #define micR 39
 
 int index = 0;
+int treshhold = 2000;
+int soundlvl = 0;
 
 void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
     Serial.printf("Listing directory: %s\n", dirname);
@@ -199,5 +201,8 @@ void setup(){
 }
 
 void loop(){
-    writeFile(SD, String(index) + ".wav", "")
+    int soundlvl = (analogRead(micL) + analogRead(micR)) / 2;
+    if(treshhold < soundlvl){
+        writeFile(SD, String(index) + ".wav", "RIFF____")
+    }
 }
