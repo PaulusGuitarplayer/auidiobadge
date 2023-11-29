@@ -198,11 +198,13 @@ void setup(){
 
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
+
+    writeFile(SD, String(index) + ".wav", 0x52494646ffffffff57415645666d7420100000000100020044ac000010b10200040010006461ffffffff)
 }
 
 void loop(){
-    int soundlvl = (analogRead(micL) + analogRead(micR)) / 2;
-    if(treshhold < soundlvl){
-        writeFile(SD, String(index) + ".wav", "RIFF____")
-    }
+    //int soundlvl = (analogRead(micL) + analogRead(micR)) / 2;
+    //if(treshhold < soundlvl){
+    //    writeFile(SD, String(index) + ".wav", "RIFF____")
+    //}
 }
