@@ -60,9 +60,9 @@ void loop(){
                         recordAudio();
                     }
                     else {
-                        while (millis() < 5000)
+                        for(int i = 0; i <=220500 ; i++)
                         {
-                        recordAudio();
+                            recordAudio();
                         }
                     }
                 }
