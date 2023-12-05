@@ -17,6 +17,8 @@ void writeFile(fs::FS &fs, const char * path, const char * message){
         Serial.println("Write failed");
     }
     file.close();
+
+    //basic functoin for writing files
 }
 
 void appendFile(fs::FS &fs, const char * path, const char * message){
@@ -33,6 +35,8 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
         Serial.println("Append failed");
     }
     file.close();
+
+    //basic function for appending files
 }
 
 void writeHeader(){
@@ -49,17 +53,21 @@ void writeHeader(){
     appendFile(SD, "/" + index + ".wav", bitsPerSample + nul); //bitsPerSample
     appendFile(SD, "/" + index + ".wav", d + a + t + a); //subchunk2id
     appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //subchunk2size
-    indx += 1;
+    indx += 1; //plusing 1 to number of file
+
+    //basic function for writing wav header
 }
 
 void recordAudio(){
-    micLval = analogRead(micL);
-    int leftLevel = map(micLval, 0, 4095, 0, 255);
-    const char * leftSymbol = (const char *)leftLevel;
-    micRval = analogRead(micR);
-    int rightLevel = map(micRval, 0, 4095, 0, 255);
-    const char * rightSymbol = (const char *)rightLevel;
-    appendFile(SD, "/" + index + ".wav", leftSymbol);
-    appendFile(SD, "/" + index + ".wav", rightSymbol);
-    delayMicroseconds(20);
+    micLval = analogRead(micL); //assigning a value of left microphone to a micLval variable
+    int leftLevel = map(micLval, 0, 4095, 0, 255); //changing bit depth from 12 bit to 8 bit
+    const char * leftSymbol = (const char *)leftLevel; //changing value of microphone from number format to symbols for writing to file
+    micRval = analogRead(micR); //assigning a value of right microphone to a micLval variable
+    int rightLevel = map(micRval, 0, 4095, 0, 255); //changing bit depth from 12 bit to 8 bit
+    const char * rightSymbol = (const char *)rightLevel; //changing value of microphone from number format to symbols for writing to file
+    appendFile(SD, "/" + index + ".wav", leftSymbol); //writing symbol to file
+    appendFile(SD, "/" + index + ".wav", rightSymbol); //writing symbol to file
+    delayMicroseconds(18); //pause for samling frequency
+
+    //basic function for recording audio data
 }
