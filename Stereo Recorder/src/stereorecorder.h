@@ -61,5 +61,5 @@ void recordAudio(){
     const char * rightSymbol = (const char *)rightLevel;
     appendFile(SD, "/" + index + ".wav", leftSymbol);
     appendFile(SD, "/" + index + ".wav", rightSymbol);
-    //delayMicroseconds(20);
+    delayMicroseconds(20);
 }
