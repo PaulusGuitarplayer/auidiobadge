@@ -8,77 +8,13 @@ License: GNU GPL v3
 #include "FS.h"
 #include "SD.h"
 #include "SPI.h"
+#include "symbols.h"
 
 #define micL 36
 #define micR 39
 
-int indx = 1;
 int treshhold = 2000;
 int soundlvl = 0;
-
-void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
-    Serial.printf("Listing directory: %s\n", dirname);
-    File root = fs.open(dirname);
-    if(!root){
-        Serial.println("Failed to open directory");
-        return;
-    }
-    if(!root.isDirectory()){
-        Serial.println("Not a directory");
-        return;
-    }
-
-    File file = root.openNextFile();
-    while(file){
-        if(file.isDirectory()){
-            Serial.print("  DIR : ");
-            Serial.println(file.name());
-            if(levels){
-                listDir(fs, file.path(), levels -1);
-            }
-        } else {
-            Serial.print("  FILE: ");
-            Serial.print(file.name());
-            Serial.print("  SIZE: ");
-            Serial.println(file.size());
-        }
-        file = root.openNextFile();
-    }
-}
-
-void createDir(fs::FS &fs, const char * path){
-    Serial.printf("Creating Dir: %s\n", path);
-    if(fs.mkdir(path)){
-        Serial.println("Dir created");
-    } else {
-        Serial.println("mkdir failed");
-    }
-}
-
-void removeDir(fs::FS &fs, const char * path){
-    Serial.printf("Removing Dir: %s\n", path);
-    if(fs.rmdir(path)){
-        Serial.println("Dir removed");
-    } else {
-        Serial.println("rmdir failed");
-    }
-}
-
-void readFile(fs::FS &fs, const char * path){
-    Serial.printf("Reading file: %s\n", path);
-
-    File file = fs.open(path);
-    if(!file){
-        Serial.println("Failed to open file for reading");
-        return;
-    }
-
-    Serial.print("Read from file: ");
-    while(file.available()){
-        Serial.write(file.read());
-    }
-    file.close();
-}
 
 void writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
@@ -112,67 +48,39 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
     file.close();
 }
 
-void renameFile(fs::FS &fs, const char * path1, const char * path2){
-    Serial.printf("Renaming file %s to %s\n", path1, path2);
-    if (fs.rename(path1, path2)) {
-        Serial.println("File renamed");
-    } else {
-        Serial.println("Rename failed");
-    }
+void writeHeader(){
+    writeFile(SD, "/" + index + ".wav", R + I + F + F); //chunkId
+    appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //chunkSize
+    appendFile(SD, "/" + index + ".wav", W + A + V + E); //format
+    appendFile(SD, "/" + index + ".wav", f + m + t + space); //subchunk1id
+    appendFile(SD, "/" + index + ".wav", subchunk1size + nul + nul + nul); //subchunk1size
+    appendFile(SD, "/" + index + ".wav", audioFormat + nul); //audioFormat
+    appendFile(SD, "/" + index + ".wav", numChannels + nul); //numChannels
+    appendFile(SD, "/" + index + ".wav", sampleRateChar1 + sampleRateChar2 + nul + nul); //sampleRate
+    appendFile(SD, "/" + index + ".wav", byteRateChar1 + byteRateChar2 + byteRateChar3 + nul); //byteRate
+    appendFile(SD, "/" + index + ".wav", blockAlign + nul); //blockAlign
+    appendFile(SD, "/" + index + ".wav", bitsPerSample + nul); //bitsPerSample
+    appendFile(SD, "/" + index + ".wav", d + a + t + a); //subchunk2id
+    appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //subchunk2size
+    indx += 1;
 }
 
-void deleteFile(fs::FS &fs, const char * path){
-    Serial.printf("Deleting file: %s\n", path);
-    if(fs.remove(path)){
-        Serial.println("File deleted");
-    } else {
-        Serial.println("Delete failed");
-    }
-}
-
-void testFileIO(fs::FS &fs, const char * path){
-    File file = fs.open(path);
-    static uint8_t buf[512];
-    size_t len = 0;
-    uint32_t start = millis();
-    uint32_t end = start;
-    if(file){
-        len = file.size();
-        size_t flen = len;
-        start = millis();
-        while(len){
-            size_t toRead = len;
-            if(toRead > 512){
-                toRead = 512;
-            }
-            file.read(buf, toRead);
-            len -= toRead;
-        }
-        end = millis() - start;
-        Serial.printf("%u bytes read for %u ms\n", flen, end);
-        file.close();
-    } else {
-        Serial.println("Failed to open file for reading");
-    }
-
-
-    file = fs.open(path, FILE_WRITE);
-    if(!file){
-        Serial.println("Failed to open file for writing");
-        return;
-    }
-
-    size_t i;
-    start = millis();
-    for(i=0; i<2048; i++){
-        file.write(buf, 512);
-    }
-    end = millis() - start;
-    Serial.printf("%u bytes written for %u ms\n", 2048 * 512, end);
-    file.close();
+void recordAudio(){
+    micLval = analogRead(micL);
+    int leftLevel = map(micLval, 0, 4095, 0, 255);
+    const char * leftSymbol = (const char *)leftLevel;
+    micRval = analogRead(micR);
+    int rightLevel = map(micRval, 0, 4095, 0, 255);
+    const char * rightSymbol = (const char *)rightLevel;
+    appendFile(SD, "/" + index + ".wav", leftSymbol);
+    appendFile(SD, "/" + index + ".wav", rightSymbol);
+    //delayMicroseconds(20);
 }
 
 void setup(){
+    pinMode(micL, INPUT);
+    pinMode(micR, INPUT);
+    
     Serial.begin(115200);
     if(!SD.begin()){
         Serial.println("Card Mount Failed");
@@ -198,33 +106,31 @@ void setup(){
 
     uint64_t cardSize = SD.cardSize() / (1024 * 1024);
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
-
-    deleteFile(SD, "/1.wav");
-
-    //writeFile(SD, indx + ".wav", 0x52494646ffffffff57415645666d7420100000000100020044ac000010b10200040010006461ffffffff)
-    //writeFile(SD, "/1.wav", "RIFFяяяяWAVEfmt      D¬  ±   dataяяяя");
-    //uint8_t my_hex = 0x52494646;
-    //String my_char = String((char)my_hex);
-    //unsigned char riff=0x52494646;
-
-    //int n = 0x52494646;
-    writeFile(SD, "/1.wav", "");
-    /*appendFile(SD, "/1.wav", "яяяя");
-    appendFile(SD, "/1.wav", "WAVEfmt ");
-    appendFile(SD, "/1.wav", "яяяя");
-    */
-    appendFile(SD, "/1.wav", "evbjfeinvifeqpfnrieqhroueqlnvrye0qoflnrw ivkruewjnvoreulhivjnfeavhl;rfhvbfreklwvn gfsouil ingsoglsns gos gog gus bghsf");
-
-    /*for(int i = 0; i <= 10000000000000000; i++) {
-      for(int f= 0; i);
-      appendFile(SD, "/1.wav", String(i));
-    }
-    */
 }
 
 void loop(){
-    //int soundlvl = (analogRead(micL) + analogRead(micR)) / 2;
-    //if(treshhold < soundlvl){
-    //    writeFile(SD, String(index) + ".wav", "RIFF____")
-    //}
+    micRval = analogRead(micR);
+    micLval = analogRead(micL);
+    if(treshhold < micRval || treshhold < micLval){
+        writeHeader();
+        if(treshhold < micRval || treshhold < micLval){
+            recordAudio();
+            if(treshhold < micRval || treshhold < micLval){
+                recordAudio();
+            }
+            else {
+                for(int f = 0; f <= 20; f++){
+                    if(treshhold < micRval || treshhold < micLval) {
+                        recordAudio();
+                    }
+                    else {
+                        while (millis() < 5000)
+                        {
+                        recordAudio();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
