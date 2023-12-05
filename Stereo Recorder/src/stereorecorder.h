@@ -1,3 +1,6 @@
+#pragma once
+#include <Arduino.h>
+
 #include "FS.h"
 #include "SD.h"
 #include "SPI.h"
@@ -39,7 +42,7 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
     //basic function for appending files
 }
 
-void writeHeader(){
+void writeHeader(){   
     writeFile(SD, "/" + index + ".wav", R + I + F + F); //chunkId
     appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //chunkSize
     appendFile(SD, "/" + index + ".wav", W + A + V + E); //format
@@ -53,7 +56,7 @@ void writeHeader(){
     appendFile(SD, "/" + index + ".wav", bitsPerSample + nul); //bitsPerSample
     appendFile(SD, "/" + index + ".wav", d + a + t + a); //subchunk2id
     appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //subchunk2size
-    indx += 1; //plusing 1 to number of file
+    index += 1; //plusing 1 to number of file
 
     //basic function for writing wav header
 }
