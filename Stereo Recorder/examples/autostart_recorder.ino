@@ -5,7 +5,7 @@ by Paulus
 License: GNU GPL v3
 */
 
-#include "stereorecorder.h" //including recorder library, sd, fs and spi libs is already included
+#include <stereorecorder.h> //including recorder library, sd, fs and spi libs is already included
 
 #define micL 36 //pin of left channel microphone
 #define micR 39 //pin of right channel microphone
