@@ -2,6 +2,9 @@
 #include <Arduino.h>
 
 #include "FS.h"
+#include <cstring>
+#include <iostream>
+#include <string.h>
 #include "SD.h"
 #include "SPI.h"
 #include "symbols.h"
@@ -43,7 +46,12 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
 }
 
 void writeHeader(){   
-    writeFile(SD, (const char*)index, R); //chunkId
+    char buf4[4];
+    strcpy(buf4, R);
+    strcat(buf4, I);
+    strcat(buf4, F);
+    strcat(buf4, F);
+    writeFile(SD, (const char*)index, buf4); //chunkId
     /*appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //chunkSize
     appendFile(SD, "/" + index + ".wav", W + A + V + E); //format
     appendFile(SD, "/" + index + ".wav", f + m + t + space); //subchunk1id
