@@ -1,4 +1,4 @@
-int indx = 0;
+int index = 0;
 int micRval = 0;
 int micLval = 0;
 int micRmid = 0;

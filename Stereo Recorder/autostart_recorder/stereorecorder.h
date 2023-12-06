@@ -2,9 +2,6 @@
 #include <Arduino.h>
 
 #include "FS.h"
-#include <cstring>
-#include <iostream>
-#include <string.h>
 #include "SD.h"
 #include "SPI.h"
 #include "symbols.h"
@@ -46,25 +43,51 @@ void appendFile(fs::FS &fs, const char * path, const char * message){
 }
 
 void writeHeader(){   
-    char buf4[4];
-    strcpy(buf4, R);
-    strcat(buf4, I);
-    strcat(buf4, F);
-    strcat(buf4, F);
-    writeFile(SD, (const char*)index, buf4); //chunkId
-    /*appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //chunkSize
-    appendFile(SD, "/" + index + ".wav", W + A + V + E); //format
-    appendFile(SD, "/" + index + ".wav", f + m + t + space); //subchunk1id
-    appendFile(SD, "/" + index + ".wav", subchunk1size + nul + nul + nul); //subchunk1size
-    appendFile(SD, "/" + index + ".wav", audioFormat + nul); //audioFormat
-    appendFile(SD, "/" + index + ".wav", numChannels + nul); //numChannels
-    appendFile(SD, "/" + index + ".wav", sampleRateChar1 + sampleRateChar2 + nul + nul); //sampleRate
-    appendFile(SD, "/" + index + ".wav", byteRateChar1 + byteRateChar2 + byteRateChar3 + nul); //byteRate
-    appendFile(SD, "/" + index + ".wav", blockAlign + nul); //blockAlign
-    appendFile(SD, "/" + index + ".wav", bitsPerSample + nul); //bitsPerSample
-    appendFile(SD, "/" + index + ".wav", d + a + t + a); //subchunk2id
-    appendFile(SD, "/" + index + ".wav", sizeCharacter + sizeCharacter + sizeCharacter + sizeCharacter); //subchunk2size
-    index += 1; //plusing 1 to number of file*/
+    writeFile(SD, "/" + String(index) + ".wav", R);
+    appendFile(SD, "/" + String(index) + ".wav", I);
+    appendFile(SD, "/" + String(index) + ".wav", F);
+    appendFile(SD, "/" + String(index) + ".wav", F); //chunkId
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter);
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter);
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter);
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter); //chunkSize
+    appendFile(SD, "/" + String(index) + ".wav", W);
+    appendFile(SD, "/" + String(index) + ".wav", A);
+    appendFile(SD, "/" + String(index) + ".wav", V);
+    appendFile(SD, "/" + String(index) + ".wav", E); //format
+    appendFile(SD, "/" + String(index) + ".wav", f);
+    appendFile(SD, "/" + String(index) + ".wav", m);
+    appendFile(SD, "/" + String(index) + ".wav", t);
+    appendFile(SD, "/" + String(index) + ".wav", space); //subchunk1id
+    appendFile(SD, "/" + String(index) + ".wav", subchunk1size);
+    appendFile(SD, "/" + String(index) + ".wav", nul);
+    appendFile(SD, "/" + String(index) + ".wav", nul);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //subchunk1size
+    appendFile(SD, "/" + String(index) + ".wav", audioFormat);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //audioFormat
+    appendFile(SD, "/" + String(index) + ".wav", numChannels);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //numChannels
+    appendFile(SD, "/" + String(index) + ".wav", sampleRateChar1);
+    appendFile(SD, "/" + String(index) + ".wav", sampleRateChar2);
+    appendFile(SD, "/" + String(index) + ".wav", nul);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //sampleRate
+    appendFile(SD, "/" + String(index) + ".wav", byteRateChar1);
+    appendFile(SD, "/" + String(index) + ".wav", byteRateChar2);
+    appendFile(SD, "/" + String(index) + ".wav", byteRateChar3);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //byteRate
+    appendFile(SD, "/" + String(index) + ".wav", blockAlign);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //blockAlign
+    appendFile(SD, "/" + String(index) + ".wav", bitsPerSample);
+    appendFile(SD, "/" + String(index) + ".wav", nul); //bitsPerSample
+    appendFile(SD, "/" + String(index) + ".wav", d);
+    appendFile(SD, "/" + String(index) + ".wav", a);
+    appendFile(SD, "/" + String(index) + ".wav", t);
+    appendFile(SD, "/" + String(index) + ".wav", a); //subchunk2id
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter);
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter);
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter);
+    appendFile(SD, "/" + String(index) + ".wav", sizeCharacter); //subchunk2size
+    index += 1; //plusing 1 to number of file
 
     //basic function for writing wav header
 }
