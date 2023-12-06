@@ -12,6 +12,7 @@ License: GNU GPL v3
 
 int treshhold = 2000; //level of sound when record starting
 int recordTime = 5000; //minimum time of recording
+int num = 0;
 
 void setup(){
     pinMode(micL, INPUT); //initialisation micL as input
