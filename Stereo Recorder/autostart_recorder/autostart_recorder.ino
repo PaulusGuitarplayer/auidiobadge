@@ -123,64 +123,64 @@ void writeHeader(){
     Serial.println("Writing header of:");
     Serial.println("/" + String(num) + ".wav");
     writeFile(SD, indx, R);
-    /*appendFile(SD, "/" + String(num) + ".wav", I);
-    appendFile(SD, "/" + String(num) + ".wav", F);
-    appendFile(SD, "/" + String(num) + ".wav", F); //chunkId
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter);
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter);
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter);
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter); //chunkSize
-    appendFile(SD, "/" + String(num) + ".wav", W);
-    appendFile(SD, "/" + String(num) + ".wav", A);
-    appendFile(SD, "/" + String(num) + ".wav", V);
-    appendFile(SD, "/" + String(num) + ".wav", E); //format
-    appendFile(SD, "/" + String(num) + ".wav", f);
-    appendFile(SD, "/" + String(num) + ".wav", m);
-    appendFile(SD, "/" + String(num) + ".wav", t);
-    appendFile(SD, "/" + String(num) + ".wav", space); //subchunk1id
-    appendFile(SD, "/" + String(num) + ".wav", subchunk1size);
-    appendFile(SD, "/" + String(num) + ".wav", nul);
-    appendFile(SD, "/" + String(num) + ".wav", nul);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //subchunk1size
-    appendFile(SD, "/" + String(num) + ".wav", audioFormat);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //audioFormat
-    appendFile(SD, "/" + String(num) + ".wav", numChannels);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //numChannels
-    appendFile(SD, "/" + String(num) + ".wav", sampleRateChar1);
-    appendFile(SD, "/" + String(num) + ".wav", sampleRateChar2);
-    appendFile(SD, "/" + String(num) + ".wav", nul);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //sampleRate
-    appendFile(SD, "/" + String(num) + ".wav", byteRateChar1);
-    appendFile(SD, "/" + String(num) + ".wav", byteRateChar2);
-    appendFile(SD, "/" + String(num) + ".wav", byteRateChar3);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //byteRate
-    appendFile(SD, "/" + String(num) + ".wav", blockAlign);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //blockAlign
-    appendFile(SD, "/" + String(num) + ".wav", bitsPerSample);
-    appendFile(SD, "/" + String(num) + ".wav", nul); //bitsPerSample
-    appendFile(SD, "/" + String(num) + ".wav", d);
-    appendFile(SD, "/" + String(num) + ".wav", a);
-    appendFile(SD, "/" + String(num) + ".wav", t);
-    appendFile(SD, "/" + String(num) + ".wav", a); //subchunk2id
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter);
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter);
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter);
-    appendFile(SD, "/" + String(num) + ".wav", sizeCharacter); //subchunk2size
+    appendFile(SD, indx, I);
+    appendFile(SD, indx, F);
+    appendFile(SD, indx, F); //chunkId
+    appendFile(SD, indx, sizeCharacter);
+    appendFile(SD, indx, sizeCharacter);
+    appendFile(SD, indx, sizeCharacter);
+    appendFile(SD, indx, sizeCharacter); //chunkSize
+    appendFile(SD, indx, W);
+    appendFile(SD, indx, A);
+    appendFile(SD, indx, V);
+    appendFile(SD, indx, E); //format
+    appendFile(SD, indx, f);
+    appendFile(SD, indx, m);
+    appendFile(SD, indx, t);
+    appendFile(SD, indx, space); //subchunk1id
+    appendFile(SD, indx, subchunk1size);
+    appendFile(SD, indx, nul);
+    appendFile(SD, indx, nul);
+    appendFile(SD, indx, nul); //subchunk1size
+    appendFile(SD, indx, audioFormat);
+    appendFile(SD, indx, nul); //audioFormat
+    appendFile(SD, indx, numChannels);
+    appendFile(SD, indx, nul); //numChannels
+    appendFile(SD, indx, sampleRateChar1);
+    appendFile(SD, indx, sampleRateChar2);
+    appendFile(SD, indx, nul);
+    appendFile(SD, indx, nul); //sampleRate
+    appendFile(SD, indx, byteRateChar1);
+    appendFile(SD, indx, byteRateChar2);
+    appendFile(SD, indx, byteRateChar3);
+    appendFile(SD, indx, nul); //byteRate
+    appendFile(SD, indx, blockAlign);
+    appendFile(SD, indx, nul); //blockAlign
+    appendFile(SD, indx, bitsPerSample);
+    appendFile(SD, indx, nul); //bitsPerSample
+    appendFile(SD, indx, d);
+    appendFile(SD, indx, a);
+    appendFile(SD, indx, t);
+    appendFile(SD, indx, a); //subchunk2id
+    appendFile(SD, indx, sizeCharacter);
+    appendFile(SD, indx, sizeCharacter);
+    appendFile(SD, indx, sizeCharacter);
+    appendFile(SD, indx, sizeCharacter); //subchunk2size
     num += 1; //plusing 1 to number of file*/
 
     //basic function for writing wav header
 }
 
 void recordAudio(){
-    /*micLval = analogRead(micL); //assigning a value of left microphone to a micLval variable
+    micLval = analogRead(micL); //assigning a value of left microphone to a micLval variable
     int leftLevel = map(micLval, 0, 4095, 0, 255); //changing bit depth from 12 bit to 8 bit
     const char * leftSymbol = (const char *)leftLevel; //changing value of microphone from number format to symbols for writing to file
     micRval = analogRead(micR); //assigning a value of right microphone to a micLval variable
     int rightLevel = map(micRval, 0, 4095, 0, 255); //changing bit depth from 12 bit to 8 bit
     const char * rightSymbol = (const char *)rightLevel; //changing value of microphone from number format to symbols for writing to file
-    appendFile(SD, "/" + index + ".wav", leftSymbol); //writing symbol to file
-    appendFile(SD, "/" + index + ".wav", rightSymbol); //writing symbol to file
-    delayMicroseconds(18); //pause for samling frequency*/
+    appendFile(SD, indx, leftSymbol); //writing symbol to file
+    appendFile(SD, indx, rightSymbol); //writing symbol to file
+    // delayMicroseconds(18); //pause for samling frequency
 
     //basic function for recording audio data
 }
@@ -216,6 +216,23 @@ void setup(){
     Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
     writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
+    writeHeader();
+    recordAudio();
 }
 
 void loop(){
