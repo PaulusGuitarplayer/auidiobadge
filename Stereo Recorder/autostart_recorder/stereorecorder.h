@@ -6,6 +6,8 @@
 #include "SPI.h"
 #include "symbols.h"
 
+int num = 0;
+
 void writeFile(fs::FS &fs, const char * path, const char * message){
     Serial.printf("Writing file: %s\n", path);
 
